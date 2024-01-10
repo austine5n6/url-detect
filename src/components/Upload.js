@@ -1,16 +1,18 @@
 import React, {useState} from 'react'
-import { useNavigate } from 'react-router-dom';
+// import { Navigate } from 'react-router-dom';
 
 const Upload = () => {
     const [fileName, setFileName] = useState('No file chosen');
-    const navigate = useNavigate();
+    const [result, setResult] = useState('')
+    
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
     setFileName(selectedFile ? selectedFile.name : 'No file chosen');
   };
 
-  const handleUpload = async () => {
+  const handleUpload = async (e) => {
+    e.preventDefault()
     const fileInput = document.getElementById('file-input');
 
     // Check if a file is selected before proceeding with the upload
@@ -20,26 +22,17 @@ const Upload = () => {
       }
     const formData = new FormData();
     formData.append('file', fileInput.files[0]);
-
   try {
     const response = await fetch("http://localhost:5000/upload", {
       method: 'POST',
       body: formData,
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Error:', errorData.message);
-      return;
-    }
 
     const result = await response.json();
-    console.log(result.message)
-    document.getElementById('result').innerText = result.message;
-
-  
-     // Navigate to the '/url' route
-     navigate('/url');
+    setResult(result.message);
+    console.log('Labels:', result.label)
+   
 
   } catch (error) {
     console.error('Error:', error);
@@ -73,7 +66,9 @@ const Upload = () => {
           </button>
         </form>
       </div>
-      <div className="text-white text-lg" id="result"></div>
+      <div className="text-white text-lg pl-5" id="result">
+      {result}
+      </div>
     </div>
   );
 };
