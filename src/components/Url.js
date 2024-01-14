@@ -10,8 +10,9 @@ const Url = () => {
 
             try {
               // Make an HTTP request to your Express.js server
-              const response = await fetch('https://url-detect-server.onrender.com/process-url', {
+              const response = await fetch("https://url-detect-server.onrender.com/process-url", {
                 method: 'POST',
+                mode: 'no-cors',
                 headers: {
                   'Content-Type': 'application/json',
                 },
